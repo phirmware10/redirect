@@ -1,16 +1,15 @@
 require('dotenv').config()
-const getSecret = require('./secrets')
+const { execSync } = require('child_process')
+
+const secrets = process.env.NODE_ENV === 'production'
+  ? JSON.parse(execSync('node config/secrets.js'))
+  : '{}'
 
 const dato = {
-  url: 'https://graphql.datocms.com/'
-}
-
-async function getDatoSecret () {
-  const token = await getSecret('dato-token')
-  return token
+  url: 'https://graphql.datocms.com/',
+  token: secrets['dato-token'] || process.env.DATO_TOKEN
 }
 
 module.exports = {
-  dato,
-  getDatoSecret
+  dato
 }

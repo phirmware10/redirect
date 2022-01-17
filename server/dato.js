@@ -1,6 +1,6 @@
 const { promisify } = require('util')
 const request = promisify(require('request').post)
-const { dato: { url }, getDatoSecret } = require('../config')
+const { url, token } = require('../config').dato
 
 module.exports = {
   findSlugImage
@@ -32,7 +32,6 @@ query($slugPattern: String) {
 `
 
 async function findSlugImage (slugPattern) {
-  const token = await getDatoSecret()
   const { courseDownload } = await datoFetch(SLUG_QUERY, { slugPattern }, { url, token })
 
   return courseDownload
